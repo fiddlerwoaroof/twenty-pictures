@@ -1,0 +1,75 @@
+;; This file is part of Twenty Pictures.
+;;
+;; Twenty Pictures is free software: you can redistribute it and/or
+;; modify it under the terms of the GNU Affero General Public License
+;; as published by the Free Software Foundation, either version 3 of
+;; the License, or (at your option) any later version.
+;;
+;; Twenty Pictures is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; Affero General Public License for more details.
+;;
+;; You should have received a copy of the GNU Affero General Public
+;; License along with Twenty Pictures.  If not, see
+;; <http://www.gnu.org/licenses/>.
+
+(page "index.html"
+  (:require-macros [twenty-pictures.let-promise :refer [let-promise]]))
+
+(defc sections [])
+
+(defc toggled nil)
+
+(defc= tiled (if toggled
+               (vec (concat (subvec sections (inc toggled))
+                            (subvec sections 0 toggled)))
+               sections))
+
+(defc= current (when (and toggled (not (empty? sections)))
+                 ((sections toggled) 1)))
+
+(defn get-image-url [n]
+  (let-promise [[resp (js/fetch (str "https://source.unsplash.com/category/nature/"
+                                     (+ 2000 (rand-int 500))
+                                     "x"
+                                     (+ 2000 (rand-int 500)))
+                                (js-obj "method" "head"))]]
+    (swap! sections assoc-in [n 1 :background]
+           {:background-image (str "url(" (.-url resp) ")")})))
+
+(dotimes [n 20]
+  (swap! sections conj [n {:text (inc n)}])
+  (get-image-url n))
+
+
+(html :lang "en"
+      (head (title "Twenty Pictures")
+            (link :href "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" :rel "stylesheet")
+            (link :href "app.css" :rel "stylesheet")
+            (script :src "es6-promise.min.js")
+            (script :src "fetch.js"))
+      (body
+       (h1 "Twenty Pictures")
+       (article :class "tiles"
+                (when-tpl current
+                  (div :class ["card" "toggled"]
+                       (section :click #(reset! toggled nil)
+                                :css (cell= (get current :background))
+                                (button :class "reload fa fa-refresh"
+                                        :click (fn [ev]
+                                                 (get-image-url @toggled)
+                                                 (.preventDefault ev)
+                                                 false)))))
+                (loop-tpl :bindings [[idx section-el] tiled]
+                  (div :class "card"
+                       (section :click #(do (reset! toggled @idx)
+                                            (-> js/document
+                                                (.querySelector "div.card:first-child")
+                                                (.scrollIntoView)))
+                                {:css (cell= (get section-el :background))}))))
+       (h3 "Made with "
+           (a :href "http://unsplash.com"
+              "Unsplash"))))
+
+
