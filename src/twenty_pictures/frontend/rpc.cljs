@@ -13,8 +13,6 @@
 (defc images-loading nil)
 (defc images-error nil)
 
-(defc= logger (.log js/console (clj->js (map #(% :background) images))))
-
 (def get-images
   (mkremote 'twenty-pictures.api/get-images
             images url-error url-value))

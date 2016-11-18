@@ -23,11 +23,8 @@
 (defc toggled nil)
 
 (defc= tiled (if toggled
-               (do (.log js/console toggled)
-                   (/ 1 0)
-
-                   (vec (concat (subvec sections (inc toggled))
-                                (subvec sections 0 toggled))))
+               (vec (concat (subvec sections (inc toggled))
+                            (subvec sections 0 toggled)))
                sections))
 
 (defc= current (when (and toggled (not (empty? sections)))
@@ -70,7 +67,6 @@
                   (div :class "card"
                        (section :click #(do (reset! toggled @idx)
                                             (rpc/get-images)
-                                            (cell= (.log js/console (clj->js sections)))
                                             (-> js/document
                                                 (.querySelector "div.card:first-child")
                                                 (.scrollIntoView)))
