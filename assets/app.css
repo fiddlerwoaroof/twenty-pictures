@@ -118,7 +118,7 @@ div.card {
 }
 
 div.card section {
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 div.card section[style] {
@@ -155,3 +155,9 @@ div.toggled .reload {
 }
     
 
+
+.error {
+    background: red;
+    color: white;
+    padding: 2em;
+}

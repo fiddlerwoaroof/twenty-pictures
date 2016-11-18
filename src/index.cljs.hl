@@ -15,15 +15,19 @@
 ;; <http://www.gnu.org/licenses/>.
 
 (page "index.html"
+  (:require [twenty-pictures.frontend.rpc :as rpc])
   (:require-macros [twenty-pictures.let-promise :refer [let-promise]]))
 
-(defc sections [])
+(defc= sections (vec (map-indexed vector rpc/images)))
 
 (defc toggled nil)
 
 (defc= tiled (if toggled
-               (vec (concat (subvec sections (inc toggled))
-                            (subvec sections 0 toggled)))
+               (do (.log js/console toggled)
+                   (/ 1 0)
+
+                   (vec (concat (subvec sections (inc toggled))
+                                (subvec sections 0 toggled))))
                sections))
 
 (defc= current (when (and toggled (not (empty? sections)))
@@ -35,13 +39,14 @@
                                      "x"
                                      (+ 2000 (rand-int 500)))
                                 (js-obj "method" "head"))]]
-    (swap! sections assoc-in [n 1 :background]
-           {:background-image (str "url(" (.-url resp) ")")})))
+    (let [the-url (.-url resp)]
+      (rpc/save-image n the-url))))
 
-(dotimes [n 20]
-  (swap! sections conj [n {:text (inc n)}])
-  (get-image-url n))
+;; (dotimes [n 20]
+;;   (swap! sections conj [n {:text (inc n)}])
+;;  (get-image-url n))
 
+(rpc/get-images)
 
 (html :lang "en"
       (head (title "Twenty Pictures")
@@ -55,7 +60,7 @@
                 (when-tpl current
                   (div :class ["card" "toggled"]
                        (section :click #(reset! toggled nil)
-                                :css (cell= (get current :background))
+                                {:style (cell= (str "background-image: url(" (get current :background) ")"))}
                                 (button :class "reload fa fa-refresh"
                                         :click (fn [ev]
                                                  (get-image-url @toggled)
@@ -64,10 +69,12 @@
                 (loop-tpl :bindings [[idx section-el] tiled]
                   (div :class "card"
                        (section :click #(do (reset! toggled @idx)
+                                            (rpc/get-images)
+                                            (cell= (.log js/console (clj->js sections)))
                                             (-> js/document
                                                 (.querySelector "div.card:first-child")
                                                 (.scrollIntoView)))
-                                {:css (cell= (get section-el :background))}))))
+                                {:style (cell= (str "background-image: url(" (get section-el :background) ")"))}))))
        (h3 "Made with "
            (a :href "http://unsplash.com"
               "Unsplash"))))

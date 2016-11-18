@@ -2,7 +2,9 @@
 
 A demo photo-sharing application built around the concept of a
 twenty-picture album that is, for now, randomly generated from
-Unsplash photos
+Unsplash photos.
+
+Eventually, the goal will
 
 ## Dependencies
 
