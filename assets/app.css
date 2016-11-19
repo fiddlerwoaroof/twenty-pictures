@@ -31,7 +31,7 @@ body {
     padding-top: 8vh;
 }
 
-body::after {
+.help dl::after, body::after {
     content: " ";
     clear: both;
     float: none;
@@ -45,6 +45,10 @@ h1 {
     font-size: 4vh;
     margin-bottom: 2vh;
     padding: 2vh;
+}
+h1,h2,h3 {
+    width: 100%;
+    text-align: center;
 }
 
 article {
@@ -93,22 +97,6 @@ article {
     position: relative;
 }
 
-section {
-    background: #d8d8d8;
-    background-position: center center;
-    border: 0.1875em outset #364a43;
-    border-radius: 0.5em;
-    box-shadow: 0em 0em 1.75em #364a43;
-    color: white;
-    font-size: 1.25em;
-    font-weight: bolder;
-    padding: 2em 2.5em;
-    position: relative;
-    text-shadow: 0 0 1em black;
-    transform: translateZ(0.1em);
-    background-size: cover;
-}
-
 div.card {
     float: left;
     height: 25%;
@@ -118,11 +106,29 @@ div.card {
 }
 
 div.card section {
-    /*visibility: hidden;*/
+    background: #d8d8d8;
+    background-position: center center;
+    border: 0.1875em outset #364a43;
+    border-radius: 0.5em;
+    box-shadow: 0em 0em 1.75em #364a43;
+    color: white;
+    font-size: 1.25em;
+    font-weight: bolder;
+    position: relative;
+    text-shadow: 0 0 1em black;
+    transform: translateZ(0.1em);
+    background-size: cover;
+    overflow: hidden;
+    position: relative;
 }
 
-div.card section[style] {
-    visibility: visible;
+div.card section img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    outline: thin solid black;
+
+    object-fit: cover;
 }
 
 div.toggled {
@@ -160,4 +166,60 @@ div.toggled .reload {
     background: red;
     color: white;
     padding: 2em;
+}
+
+.help {
+    display: none;
+    position: fixed;
+    text-shadow: 0 0 0.25em black;
+    background: hsla(160, 16%, 15%, 0.8);
+    padding: 2em;
+    width: 100%;
+    color: white;
+    overflow: hidden;
+    z-index: 1;
+    
+}
+
+.help dl {
+    margin-top: 0;
+    width: 100%;
+    border: thin solid white;
+    border-top: none;
+}
+
+.help dt {
+    float: left;
+    clear: left;
+    padding: 1em 0.2em;
+    width: 33%;
+    margin: 0;
+    text-align: right;
+}
+
+.help dd {
+    float: right;
+    clear: right;
+    padding: 1em 0.5em;
+    width: 67%;
+    margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.help h2 {
+    border: thin solid white;
+    padding: 0.5em;
+    margin-bottom: 0;
+}
+
+.help.visible {
+    display: block;
+}
+
+.instructions {
+    font-size: 10px;
+    margin-right: -5em;
+    margin-left: 5em;
 }

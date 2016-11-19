@@ -2,7 +2,7 @@
   (:require-macros
    [javelin.core :refer [defc defc=]])
   (:require
-   [javelin.core :refer [cell]]
+   [javelin.core :refer [cell cell=]]
    [castra.core :refer [mkremote]]))
 
 (defc url-value nil)
@@ -18,8 +18,9 @@
             images url-error url-value))
 
 (defn save-image [n url]
-  (let [rpc-fn (mkremote 'twenty-pictures.api/save-image
-                         url-value url-error url-value)]
-    (swap! images assoc-in [n :background] url)
+  (let [image-cell (cell= (get-in images [n])
+                          (partial swap! images assoc-in [n]))
+        rpc-fn (mkremote 'twenty-pictures.api/save-image
+                         image-cell url-error url-value)]
     (rpc-fn n url)
-    (get-images)))
+    image-cell))
