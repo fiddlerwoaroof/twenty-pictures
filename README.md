@@ -4,9 +4,11 @@ A demo photo-sharing application built around the concept of a
 twenty-picture album that is, for now, randomly generated from
 Unsplash photos.
 
-Eventually, the goal will
+Eventually, the goal will be to have a simple way to setup small photo albums
 
 ## Dependencies
+
+TODO: work on deployment/development instructions . . .
 
 - java 1.7+
 - [boot][1]
