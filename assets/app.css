@@ -31,6 +31,14 @@ body {
     padding-top: 8vh;
 }
 
+main, #main, .main {
+    color: white;
+}
+
+main > article, #main > article, .main > article {
+    padding: 0.5em 0.6em;
+}
+
 .help dl::after, body::after {
     content: " ";
     clear: both;
@@ -101,15 +109,14 @@ div.card {
     float: left;
     height: 25%;
     width: 20%;
-    padding: 2%;
+    padding: 0.5%;
     cursor: pointer;
 }
 
 div.card section {
-    background: #d8d8d8;
+    background: #202c28;
     background-position: center center;
-    border: 0.1875em outset #364a43;
-    border-radius: 0.5em;
+    border: 0.1875em solid #364a43;
     box-shadow: 0em 0em 1.75em #364a43;
     color: white;
     font-size: 1.25em;
@@ -118,6 +125,8 @@ div.card section {
     text-shadow: 0 0 1em black;
     transform: translateZ(0.1em);
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     overflow: hidden;
     position: relative;
 }
@@ -135,6 +144,10 @@ div.toggled {
     width: 80%;
     height: 100%;
     position: relative;
+}
+
+div.toggled section {
+    background-size: contain;
 }
 
 div.toggled .reload {
@@ -222,4 +235,16 @@ div.toggled .reload {
     font-size: 10px;
     margin-right: -5em;
     margin-left: 5em;
+}
+
+.board-list {
+    list-style: none;
+}
+
+.board-list li a {
+    color: white;
+}
+
+.board-list li a:visited {
+    color: hsl(0, 0%, 75%);
 }

@@ -1,0 +1,24 @@
+---
+- hosts: database
+  become: true
+  tasks:
+    - pkgin: name={{ item.name }} state={{ item.get('state', 'present') }}
+      with_items:
+        - { name: postgresql95 }
+        - { name: uriparser }
+        - { name: build-essential }
+    - command: dropdb twenty_pictures
+      become_user: postgres
+    - command: dropuser twenty_pictures
+      become_user: postgres
+    - command: createuser twenty_pictures
+      become_user: postgres
+    - command: createdb -O twenty_pictures twenty_pictures
+      become_user: postgres
+    - command: psql -c "ALTER ROLE twenty_pictures ENCRYPTED PASSWORD '{{ db_password }}'"
+      become_user: postgres
+    - command: psql twenty_pictures -c "DROP EXTENSION IF EXISTS pgcrypto; CREATE EXTENSION pgcrypto"
+      become_user: postgres
+    - script: ../schema/db.sql
+      become_user: postgres
+...

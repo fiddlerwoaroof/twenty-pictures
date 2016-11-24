@@ -17,28 +17,13 @@
 
 (page "index.html"
   (:require [cljs.core.match]
+            [twenty-pictures.route :as route]
+            [twenty-pictures.help]
+            [twenty-pictures.board :as board]
+            [twenty-pictures.board-list :as board-list]
             [twenty-pictures.frontend.rpc :as rpc])
   (:require-macros [cljs.core.match :refer [match]]
                    [twenty-pictures.let-promise :refer [let-promise]]))
-
-(defn route [parts]
-  (match [parts]
-         [[id]] {:board id}
-         :else {:board "main"}))
-
-(def location-hash
-  (-> js/window
-      .-location
-      .-hash))
-
-(def parts
-  (-> location-hash
-      (.split "/")
-      next
-      vec))
-
-(defc place (route parts))
-(cell= (pr "the place is " (clj->js place)))
 
 (defc= sections (vec (map-indexed vector rpc/images)))
 
@@ -80,23 +65,13 @@
               :style (cell= (get-image-style image))
               children)))
 
-(defelem help-pane [_ _]
-  (article :class (cell= {"help" true
-                          "visible" show-help})
-           (h2 "Key Help")
-           (dl (dt "j") (dd "Next picture")
-               (dt "k") (dd "Previous picture")
-               (dt "r") (dd "Reload picture")
-               (dt "?") (dd "Show help")
-               (dt "Escape") (dd "Dismiss help and/or go back to overview"))))
-
 (defn clear! [cell]
   (reset! cell nil))
 
 (rpc/get-images)
 
 (html :lang "en"
-      (head (title "Twenty Pictures" (str place))
+      (head (title "Twenty Pictures" )
             (link :href "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" :rel "stylesheet")
             (link :href "app.css" :rel "stylesheet")
             (script :src "es6-promise.min.js")
@@ -120,26 +95,30 @@
                      false)
 
        (h1 "Twenty Pictures")
-       (help-pane)
-       (article :class "tiles"
-                (when-tpl current
-                  (image-pane :toggled true
-                              :click #(clear! toggled)
-                              :image current
-                              (button :class "reload fa fa-refresh"
-                                      :click (fn [ev]
-                                               (get-image-url @toggled)
-                                               (.preventDefault ev)
-                                               false))))
-                (loop-tpl :bindings [[idx section-el] tiled]
-                  (image-pane :toggled (cell= (= idx toggled))
-                              :click #(dosync (reset! toggled @idx)
-                                              (rpc/get-images)
-                                              (-> js/document
-                                                  (.querySelector "div.card:first-child")
-                                                  (.scrollIntoView)))
-                              :image section-el)
-                       ))
+       (when-tpl show-help
+         (twenty-pictures.help/view))
+       (case-tpl route/route
+         :home (article :class "tiles"
+                        (when-tpl current
+                          (image-pane :toggled true
+                                      :click #(clear! toggled)
+                                      :image current
+                                      (button :class "reload fa fa-refresh"
+                                              :click (fn [ev]
+                                                       (get-image-url @toggled)
+                                                       (.preventDefault ev)
+                                                       false))))
+                        (loop-tpl :bindings [[idx section-el] tiled]
+                          (image-pane :toggled (cell= (= idx toggled))
+                                      :click #(dosync (reset! toggled @idx)
+                                                      (rpc/get-images)
+                                                      (-> js/document
+                                                          (.querySelector "div.card:first-child")
+                                                          (.scrollIntoView)))
+                                      :image section-el)))
+         :board-list (board-list/view)
+         :board (board/view :board (rpc/get-board-by-uuid route/board)) 
+         (main (article "No such route " (cell= (str route/route)))))
        (h3 "Made with "
            (a :href "http://unsplash.com"
               "Unsplash")

@@ -21,7 +21,12 @@
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.293"]
                  [org.clojure/core.match "0.3.0-alpha4"]
+                 [secretary "1.2.3"]
                  [com.cemerick/piggieback "0.2.0"]
+                 [org.postgresql/postgresql "9.4.1212"]
+                 [com.layerware/hugsql "0.4.7"]
+                 [com.cemerick/url "0.1.1"]
+                 [funcool/cuerdas "2.0.1"]
                  [pandeiro/boot-http "0.7.6"]
                  [ring "1.5.0"]
                  [tailrecursion/clojure-adapter-servlet "0.2.1"]
@@ -29,8 +34,8 @@
                  [compojure "1.5.1"]
                  [org.clojure/tools.nrepl "0.2.12"]
                  [hoplon/castra "3.0.0-alpha5"]]
- :resource-paths #{"src" "assets"}
- :source-paths #{"src"}
+ :resource-paths #{"assets"}
+ :source-paths #{"src/clj" "src/cljs"}
  :asset-paths  #{"assets"})
 
 (require
