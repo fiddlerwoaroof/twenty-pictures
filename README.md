@@ -1,5 +1,7 @@
 # Twenty Pictures
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/48a398c8687d40fa94973fc6e24f979c)](https://www.codacy.com/app/fiddlerwoaroof/twenty-pictures?utm_source=github.com&utm_medium=referral&utm_content=fiddlerwoaroof/twenty-pictures&utm_campaign=badger)
+
 A demo photo-sharing application built around the concept of a
 twenty-picture album that is, for now, randomly generated from
 Unsplash photos.
