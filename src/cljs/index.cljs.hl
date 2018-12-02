@@ -124,5 +124,3 @@
               "Unsplash")
            (span :class "instructions"
                  "Push ? for help"))))
-
-

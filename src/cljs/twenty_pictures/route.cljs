@@ -13,6 +13,7 @@
 (def path
   (j/cell= (-> r
                (cuerdas.core/strip-prefix "#")
+               (cuerdas.core/strip-prefix "!")
                (cuerdas.core/strip-prefix "/")
                (#(str "/" %))
                (#(do (print "The url is: " %)
@@ -24,7 +25,7 @@
   ([path] (generate-route path nil))
   ([path query]
    {:pre [(sequential? path) (or (nil? query) (map? query))]}
-   (str "#/"
+   (str "#!/"
         (clojure.string/join "/" path)
         (if query
           (str "?"

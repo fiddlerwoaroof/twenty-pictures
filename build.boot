@@ -15,31 +15,39 @@
 ;; <http://www.gnu.org/licenses/>.
 
 (set-env!
- :dependencies '[[adzerk/boot-cljs "1.7.228-2"]
-                 [adzerk/boot-reload "0.4.13"]
-                 [hoplon/hoplon "6.0.0-alpha17"]
+ :dependencies '[[adzerk/boot-cljs "2.1.5"]
+                 [adzerk/boot-cljs-repl "0.3.0"]
+                 [adzerk/boot-reload "0.6.0"]
+                 [hoplon/hoplon "7.2.0"]
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.293"]
                  [org.clojure/core.match "0.3.0-alpha4"]
                  [secretary "1.2.3"]
-                 [com.cemerick/piggieback "0.2.0"]
-                 [org.postgresql/postgresql "9.4.1212"]
-                 [com.layerware/hugsql "0.4.7"]
+                 [com.cemerick/piggieback "0.2.2"]
+                 [org.postgresql/postgresql "42.2.5"]
+                 [com.layerware/hugsql "0.4.9"]
                  [com.cemerick/url "0.1.1"]
-                 [funcool/cuerdas "2.0.1"]
-                 [pandeiro/boot-http "0.7.6"]
-                 [ring "1.5.0"]
+                 [funcool/cuerdas "2.0.6"]
+                 [pandeiro/boot-http "0.8.3"]
+                 [ring "1.7.1"]
                  [tailrecursion/clojure-adapter-servlet "0.2.1"]
-                 [ring/ring-defaults        "0.2.1"]
-                 [compojure "1.5.1"]
-                 [org.clojure/tools.nrepl "0.2.12"]
-                 [hoplon/castra "3.0.0-alpha5"]]
+                 [ring/ring-defaults        "0.3.2"]
+                 [compojure "1.6.1"]
+                 [org.clojure/data.json "0.2.6"]
+                 [org.clojure/tools.nrepl "0.2.13"]
+                 [hoplon/castra "3.0.0-alpha5"]
+                 [hiccup "1.0.5"]
+                 [clj-http "2.3.0"]
+                 [com.cemerick/friend "0.2.3" :exclusions [org.clojure/core.cache]]
+                 [clojusc/friend-oauth2 "0.1.5"]]
+
  :resource-paths #{"assets"}
  :source-paths #{"src/clj" "src/cljs"}
  :asset-paths  #{"assets"})
 
 (require
  '[adzerk.boot-cljs         :refer [cljs]]
+ '[adzerk.boot-cljs-repl    :refer [cljs-repl]]
  '[adzerk.boot-reload       :refer [reload]]
  '[hoplon.boot-hoplon       :refer [hoplon prerender]]
  '[pandeiro.boot-http       :refer [serve]])
@@ -48,14 +56,18 @@
   "Build twenty-pictures for local development."
   []
   (comp
-   (serve :handler 'twenty-pictures.handler/handler
+   #(do (println "Starting app " %)
+        %)
+   (serve :handler 'twenty-pictures.handler/app
           :reload true
           :port 9090)
    (watch)
    (speak)
+   (cljs-repl)
    (hoplon)
    (reload :port 34533)
-   (cljs)))
+   (cljs :source-map true :optimizations :none)
+   ))
 
 (deftask prod
   "Build twenty-pictures for production deployment."
@@ -73,7 +85,7 @@
         (cljs :optimizations :advanced)
         (prerender)
         (uber :as-jars true)
-        (web :serve 'twenty-pictures.handler/handler)
+        (web :serve 'twenty-pictures.handler/app)
         (war)
         (target :dir #{"target"})))
 

@@ -2,3 +2,7 @@
 /target
 /.nrepl-port
 /.repl-history
+.cljs_rhino_repl
+[#]*[#]
+.[#]*
+*.retry
