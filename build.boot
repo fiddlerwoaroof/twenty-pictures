@@ -1,3 +1,4 @@
+(in-ns 'boot.user)
 ;; This file is part of Twenty Pictures.
 ;;
 ;; Twenty Pictures is free software: you can redistribute it and/or
@@ -15,31 +16,35 @@
 ;; <http://www.gnu.org/licenses/>.
 
 (set-env!
- :dependencies '[[adzerk/boot-cljs "2.1.5"]
-                 [adzerk/boot-cljs-repl "0.3.0"]
-                 [adzerk/boot-reload "0.6.0"]
-                 [hoplon/hoplon "7.2.0"]
-                 [org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.9.293"]
-                 [org.clojure/core.match "0.3.0-alpha4"]
-                 [secretary "1.2.3"]
-                 [com.cemerick/piggieback "0.2.2"]
-                 [org.postgresql/postgresql "42.2.5"]
-                 [com.layerware/hugsql "0.4.9"]
-                 [com.cemerick/url "0.1.1"]
-                 [funcool/cuerdas "2.0.6"]
-                 [pandeiro/boot-http "0.8.3"]
-                 [ring "1.7.1"]
-                 [tailrecursion/clojure-adapter-servlet "0.2.1"]
-                 [ring/ring-defaults        "0.3.2"]
-                 [compojure "1.6.1"]
-                 [org.clojure/data.json "0.2.6"]
-                 [org.clojure/tools.nrepl "0.2.13"]
-                 [hoplon/castra "3.0.0-alpha5"]
-                 [hiccup "1.0.5"]
-                 [clj-http "2.3.0"]
-                 [com.cemerick/friend "0.2.3" :exclusions [org.clojure/core.cache]]
-                 [clojusc/friend-oauth2 "0.1.5"]]
+ :dependencies
+ '[[adzerk/boot-cljs "2.1.5"]
+   [adzerk/boot-cljs-repl "0.4.0"]
+   [weasel "0.7.0"]
+   [adzerk/boot-reload "0.6.0"]
+   [hoplon/hoplon "7.2.0"]
+   [org.clojure/clojure "1.9.0"]
+   [org.clojure/clojurescript "1.9.293"]
+   [org.clojure/core.match "0.3.0-alpha4"]
+   [secretary "1.2.3"]
+   [cider/piggieback "0.3.10"]
+   [org.postgresql/postgresql "42.2.5"]
+   [com.layerware/hugsql "0.4.9"]
+   [com.cemerick/url "0.1.1"]
+   [funcool/cuerdas "2.0.6"]
+   [pandeiro/boot-http "0.8.3"]
+   [ring "1.7.1"]
+   [tailrecursion/clojure-adapter-servlet "0.2.1"]
+   [ring/ring-defaults        "0.3.2"]
+   [compojure "1.6.1"]
+   [org.clojure/data.json "0.2.6"]
+   [org.clojure/tools.nrepl "0.2.13"]
+   [hoplon/castra "3.0.0-alpha5"]
+   [hiccup "1.0.5"]
+   [clj-http "3.9.1"]
+   [com.cemerick/friend "0.2.3"
+    :exclusions
+    [org.clojure/core.cache]]
+   [clojusc/friend-oauth2 "0.2.0"]]
 
  :resource-paths #{"assets"}
  :source-paths #{"src/clj" "src/cljs"}
