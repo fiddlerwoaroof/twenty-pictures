@@ -1,14 +1,17 @@
 -- :name insert-new-photo-board :! name
 -- :doc add a new photo board
-insert into photo_board (name)
-values (:name)
+INSERT INTO photo_board (name)
+     VALUES (:name)
 
 -- :name get-new-photo-board :! id version
-SELECT * FROM photo_board
-WHERE id = :id AND (photo_board.id).version = :version
+SELECT *
+  FROM photo_board
+ WHERE id = :id
+   AND (photo_board.id).version = :version
 
 -- :name get-all-photo-boards
-SELECT id::text,version,name FROM photo_board
+SELECT id::text,version,name
+  FROM photo_board
 
 -- :name get-photos-in-board-by-uuid :? id
     SELECT photo_board.name,photo.text,photo.url
